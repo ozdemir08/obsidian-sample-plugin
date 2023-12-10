@@ -20,7 +20,7 @@ export default class MyPlugin extends Plugin {
 			name: 'Generate video summary',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
 				console.log(this.settings.openAIApiKey);
-				let openAiApiKey = this.settings.openAIApiKey;
+				const openAiApiKey = this.settings.openAIApiKey;
 
 				if (openAiApiKey == undefined || openAiApiKey == '' || openAiApiKey == DEFAULT_SETTINGS.openAIApiKey) {
 					new Notice('Open AI Api key is not added. Please, go to the settings and add it.');
