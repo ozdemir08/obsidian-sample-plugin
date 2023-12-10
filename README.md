@@ -8,10 +8,12 @@ minutes, making knowledge curation a breeze. Elevate your note-taking game with
 efficient information synthesis – your shortcut to insightful, concise notes.
 
 
-## Demo ![Alt Text](demo/demo.gif)
+## Demo 
 
-"Please be aware that the summarization process for lengthy videos may require a
-longer duration."
+![Alt Text](demo/demo.gif)
+
+Please be aware that the summarization process for lengthy videos may require a
+longer duration.
 
 
 ## How it works? 
@@ -21,16 +23,18 @@ the transcript into chunks, and leverages OpenAI's ChatGPT3.5 to extract key
 points. The final output is a concise Obsidian note, offering a streamlined way
 to distill lengthy videos into insightful summaries.
 
-## Credit
+## Credits
 - [Youtube Transcript](https://www.npmjs.com/package/youtube-transcript) for
   downloading Youtube Transcript.
 - [Podcast Note](https://github.com/marcjulianschwarz/obsidian-podcast-note) for
   fetching the metadata of Youtube videos.
 
-## Feedback & Donations Your feedback is invaluable! If you have thoughts or
-suggestions about the "Youtube Summarizer" plugin, we'd love to hear from you.
-Share your feedback through [this form](https://forms.gle/Fc2nzWHdmydvRmycA).
-And if you feel like supporting the continuous improvement of this tool or just
-want to express your appreciation, consider buying me a virtual coffee at [Buy
-Me a Coffee](https://www.buymeacoffee.com/mehmetozdemir). Your support keeps the
+## Feedback & Donations 
+
+Your feedback is invaluable! If you have thoughts or suggestions about the
+"Youtube Summarizer" plugin, we'd love to hear from you. Share your feedback
+through [this form](https://forms.gle/Fc2nzWHdmydvRmycA). And if you feel like
+supporting the continuous improvement of this tool or just want to express your
+appreciation, consider buying me a virtual coffee at [Buy Me a
+Coffee](https://www.buymeacoffee.com/mehmetozdemir). Your support keeps the
 innovation brewing!
