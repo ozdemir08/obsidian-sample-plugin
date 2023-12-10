@@ -1,43 +1,37 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Editor, MarkdownView, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { YoutubeVideoSummaryModal } from 'src/Modals/YoutubeVideoSummaryModal';
 
-interface MyPluginSettings {
+interface PluginSettings {
 	openAIApiKey: string;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
+const DEFAULT_SETTINGS: PluginSettings = {
 	openAIApiKey: '<REPLACE_THIS_WITH_YOUR_API_KEY>'
 }
 
 export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+	settings: PluginSettings;
 
 	async onload() {
 		await this.loadSettings();
-
-		// This creates an icon in the left ribbon.
-		const ribbonIconEl = this.addRibbonIcon('dice', 'Mehmet\'s Amazing Plugin', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
-			new Notice('This is lo la lo!');
-		});
-		// Perform additional things with the ribbon
-		ribbonIconEl.addClass('my-plugin-ribbon-class');
-
-		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
-		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText('Status Bar Text');
-
 		// This adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
-			id: 'mehmet-sample-editor-command',
-			name: 'Youtube Video Summarizer',
+			id: 'generate-video-summary',
+			name: 'Generate video summary',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
-				new YoutubeVideoSummaryModal(this.app, editor, this.settings.openAIApiKey).open();
+				console.log(this.settings.openAIApiKey);
+				let openAiApiKey = this.settings.openAIApiKey;
+
+				if (openAiApiKey == undefined || openAiApiKey == '' || openAiApiKey == DEFAULT_SETTINGS.openAIApiKey) {
+					new Notice('Open AI Api key is not added. Please, go to the settings and add it.');
+				} else {
+					new YoutubeVideoSummaryModal(this.app, editor, this.settings.openAIApiKey).open();
+				}
 			}
 		});
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new SettingTab(this.app, this));
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
@@ -62,7 +56,7 @@ export default class MyPlugin extends Plugin {
 	}
 }
 
-class SampleSettingTab extends PluginSettingTab {
+class SettingTab extends PluginSettingTab {
 	plugin: MyPlugin;
 
 	constructor(app: App, plugin: MyPlugin) {
@@ -71,7 +65,7 @@ class SampleSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		const {containerEl} = this;
+		const { containerEl } = this;
 
 		containerEl.empty();
 

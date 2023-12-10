@@ -1,4 +1,4 @@
-import { App, Editor, Modal } from "obsidian";
+import { App, Editor, Modal, Notice } from "obsidian";
 import { OpenAIClient } from "src/OpenAi/OpenAiClient";
 import { TranscriptSummarizer } from "src/TranscriptSummarizer";
 
@@ -23,10 +23,19 @@ export class YoutubeVideoSummaryModal extends Modal {
 		contentEl.createEl("br");
 		let button = contentEl.createEl("button", { text: "Generate summary" });
 
-		button.addEventListener("click", async () => {
-			let summary = await this.transcriptSummarizer.getSummaryFromUrl(input.value);
-			this.appendToWindow(summary);
-			this.close();
+		button.addEventListener("click", () => {
+			
+			new Notice('Generating summary...')
+
+			this.transcriptSummarizer.getSummaryFromUrl(input.value).then(
+				summary => {
+					this.appendToWindow(summary);
+					this.close();
+				}
+			).catch(error => {
+				console.log('error: ' + error);
+				new Notice('error: ' + error);
+			});
 		});
 	}
 

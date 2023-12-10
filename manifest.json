@@ -1,11 +1,11 @@
 {
-	"id": "Mehmet-the-Plugin",
-	"name": "Mehmet's First Obsidian Plugin",
+	"id": "Youtube-summarizer",
+	"name": "Youtube Summarizer",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "This plugin shows how awesome Mehmet is.",
-	"author": "Mehmet of course",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "A plugin to summarize the transcripts of Youtube videos.",
+	"author": "Mehmet Ozdemir",
+	"authorUrl": "https://github.com/ozdemir08",
+	"fundingUrl": "https://www.buymeacoffee.com/mehmetozdemir",
 	"isDesktopOnly": false
 }
