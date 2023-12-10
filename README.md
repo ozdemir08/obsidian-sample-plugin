@@ -7,12 +7,19 @@ From Andrew Huberman's insights to any content-rich video, it turns hours into
 minutes, making knowledge curation a breeze. Elevate your note-taking game with
 efficient information synthesis – your shortcut to insightful, concise notes.
 
+
+## Demo ![Alt Text](demo/demo.gif)
+
+"Please be aware that the summarization process for lengthy videos may require a
+longer duration."
+
+
 ## How it works? 
 
-"Youtube Summarizer" downloads YouTube video information and
-transcripts, breaks the transcript into chunks, and leverages OpenAI's
-ChatGPT3.5 to extract key points. The final output is a concise Obsidian note,
-offering a streamlined way to distill lengthy videos into insightful summaries.
+"Youtube Summarizer" downloads YouTube video information and transcripts, breaks
+the transcript into chunks, and leverages OpenAI's ChatGPT3.5 to extract key
+points. The final output is a concise Obsidian note, offering a streamlined way
+to distill lengthy videos into insightful summaries.
 
 ## Credit
 - [Youtube Transcript](https://www.npmjs.com/package/youtube-transcript) for
