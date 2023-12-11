@@ -1,7 +1,7 @@
 {
 	"id": "youtube-summarizer",
 	"name": "Youtube Summarizer",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "A plugin to summarize the transcripts of Youtube videos.",
 	"author": "Mehmet Ozdemir",
