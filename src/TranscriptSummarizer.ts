@@ -24,9 +24,6 @@ export class TranscriptSummarizer {
 		let words = transcript.split(' ');
 		let startIndex = 0;
 
-		console.log('Getting the summary...');
-		console.log(words.length);
-		
 		// Split the transcript into smaller pieces if necessary. 
 		while (startIndex < words.length - 1) {
 			let endIndex = startIndex + MAX_TOKEN_SIZE_IN_A_REQUEST > words.length ? words.length - 1 : startIndex + MAX_TOKEN_SIZE_IN_A_REQUEST;
