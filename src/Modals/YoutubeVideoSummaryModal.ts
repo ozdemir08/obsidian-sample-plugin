@@ -3,7 +3,6 @@ import { OpenAIClient } from "src/OpenAi/OpenAiClient";
 import { TranscriptSummarizer } from "src/TranscriptSummarizer";
 
 export class YoutubeVideoSummaryModal extends Modal {
-
 	editor: Editor;
 	openAiClient: OpenAIClient;
 	transcriptSummarizer: TranscriptSummarizer;
@@ -16,38 +15,39 @@ export class YoutubeVideoSummaryModal extends Modal {
 	}
 
 	onOpen() {
-		let { contentEl } = this;
+		const { contentEl } = this;
 		contentEl.createEl("h3", { text: "Enter Youtube video url:" });
-		let input = contentEl.createEl("input", { type: "text" });
+		const input = contentEl.createEl("input", { type: "text" });
 		contentEl.createEl("br");
 		contentEl.createEl("br");
-		let button = contentEl.createEl("button", { text: "Generate summary" });
+		const button = contentEl.createEl("button", {
+			text: "Generate summary",
+		});
 
 		button.addEventListener("click", () => {
-			
-			new Notice('Generating summary...')
+			new Notice("Generating summary...");
 
-			this.transcriptSummarizer.getSummaryFromUrl(input.value).then(
-				summary => {
+			this.transcriptSummarizer
+				.getSummaryFromUrl(input.value)
+				.then((summary) => {
 					this.appendToWindow(summary);
 					this.close();
-				}
-			).catch(error => {
-				console.log('error: ' + error);
-				new Notice('error: ' + error);
-			});
+				})
+				.catch((error) => {
+					new Notice("Error: " + error);
+				});
 		});
 	}
 
 	onClose() {
-		let { contentEl } = this;
+		const { contentEl } = this;
 		contentEl.empty();
 	}
 
 	appendToWindow(text: string) {
 		if (this.editor != null) {
-			let currentValue = this.editor.getValue();
-			this.editor.setValue(currentValue + '\n' + text);
+			const currentValue = this.editor.getValue();
+			this.editor.setValue(currentValue + "\n" + text);
 		}
 	}
 }
