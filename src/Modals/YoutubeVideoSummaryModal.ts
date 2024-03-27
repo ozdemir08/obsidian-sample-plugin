@@ -1,17 +1,20 @@
 import { App, Editor, Modal, Notice } from "obsidian";
 import { OpenAIClient } from "src/OpenAi/OpenAiClient";
 import { TranscriptSummarizer } from "src/TranscriptSummarizer";
+import { PluginSettings, YOUTUBE_BASE_URL } from "settings";
 
 export class YoutubeVideoSummaryModal extends Modal {
 	editor: Editor;
 	openAiClient: OpenAIClient;
 	transcriptSummarizer: TranscriptSummarizer;
+	settings: PluginSettings;
 
-	constructor(app: App, editor: Editor, openAIApiKey: string) {
+	constructor(app: App, editor: Editor, settings: PluginSettings) {
 		super(app);
+		this.settings = settings;
 		this.editor = editor;
-		this.openAiClient = new OpenAIClient(openAIApiKey);
-		this.transcriptSummarizer = new TranscriptSummarizer(this.openAiClient);
+		this.openAiClient = new OpenAIClient(this.settings.openAIApiKey);
+		this.transcriptSummarizer = new TranscriptSummarizer(this.openAiClient, this.settings);
 	}
 
 	onOpen() {
@@ -27,8 +30,14 @@ export class YoutubeVideoSummaryModal extends Modal {
 		button.addEventListener("click", () => {
 			new Notice("Generating summary...");
 
+			// handle both full URL and only video IDs
+			let url = input.value;
+			console.debug("URL: ", url);
+			if (url.search('https://') == -1 && url.search('watch?') == -1) url = `https://www.${YOUTUBE_BASE_URL}/watch?v=${url}`;
+			console.debug("URL: ", url);
+			
 			this.transcriptSummarizer
-				.getSummaryFromUrl(input.value)
+				.getSummaryFromUrl(url)
 				.then((summary) => {
 					this.appendToWindow(summary);
 					this.close();
