@@ -87,7 +87,7 @@ class SettingTab extends PluginSettingTab {
 			);
 		new Setting(containerEl)
 			.setName("Minimum Summary Size")
-			.setDesc("Minimum number key points to include in generated summary.")
+			.setDesc("Minimum number of key points per video chunk to include in the generated summary. Note: The plugin divides long videos into chunks, extracts key points from each, and then combines them for the final summary.")
 			.addText((text) =>
 				text
 					.setPlaceholder("3")
