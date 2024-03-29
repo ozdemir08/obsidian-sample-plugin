@@ -101,20 +101,6 @@ class SettingTab extends PluginSettingTab {
 					})
 			);
 		new Setting(containerEl)
-			.setName("Maximum Token Size")
-			.setDesc("Maximum size of token in a given request to OpenAI.")
-			.addText((text) =>
-				text
-					.setPlaceholder("2500")
-					.setValue("" + this.plugin.settings.maxTokenSize)
-					.onChange(async (value) => {
-						let parsed = parseInt(value);
-						if (isNaN(parsed)) return;
-						parsed = parsed > MAX_TOKEN_SIZE_IN_A_REQUEST ? MAX_TOKEN_SIZE_IN_A_REQUEST : parsed;
-						await this.plugin.updateSettings({maxTokenSize: parsed});
-					})
-			);
-		new Setting(containerEl)
 			.setName("Template format")
 			.setDesc(
 				"Enter format of template to be used when inserting summary.  Supported fields are {{Date}}, {{Title}}, {{ImageURL}}, {{Description}}, and {{VideoUrl}}.",
@@ -150,7 +136,6 @@ class SettingTab extends PluginSettingTab {
 				.setButtonText("Reset defaults")
 				.onClick(() => {
 					this.plugin.settings.summarySize = DEFAULT_SUMMARY_SIZE;
-					this.plugin.settings.maxTokenSize = MAX_TOKEN_SIZE_IN_A_REQUEST;
 					this.plugin.settings.templateFormat = DEFAULT_TEMPLATE;
 					this.plugin.settings.dateFormat = DEFAULT_DATE_FORMAT;
 				  	this.plugin.saveSettings();
