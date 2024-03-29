@@ -4,29 +4,52 @@ export const DEFAULT_TEMPLATE = "---\ndate: {{Date}}\n---\n# {{Title}}\n![]({{Im
 export const DEFAULT_DATE_FORMAT = "YYYY-MM-DD";
 export const DEFAULT_SUMMARY_SIZE = 3;
 export const MAX_SUMMARY_SIZE = 20;
-export const MAX_TOKEN_SIZE_IN_A_REQUEST = 2500;
+export const OPEN_AI_MODEL_CHOICES = ["gpt-3.5-turbo","gpt-4","gpt-4-0125-preview","gpt-4-turbo-preview","gpt-4-1106-preview","gpt-4-vision-preview","gpt-4-0613","gpt-4-32k","gpt-4-32k-0613","gpt-3.5-turbo-1106","gpt-3.5-turbo-16k","gpt-3.5-turbo-instruct","gpt-3.5-turbo-0613","gpt-3.5-turbo-16k-0613","gpt-3.5-turbo-0301"];
+export const OPEN_AI_MODELS_MAX_TOKEN_SIZES = {
+	"gpt-3.5-turbo": 4096,
+	"gpt-4": 8192,
+	"gpt-4-0125-preview": 128000,
+	"gpt-4-turbo-preview": 128000,
+	"gpt-4-1106-preview": 128000,
+	"gpt-4-vision-preview": 128000,
+	"gpt-4-0613": 8192,
+	"gpt-4-32k": 32768,
+	"gpt-4-32k-0613": 32768,
+	"gpt-3.5-turbo-1106": 16385,
+	"gpt-3.5-turbo-16k": 16384,
+	"gpt-3.5-turbo-instruct": 4096,
+	"gpt-3.5-turbo-0613": 4096,
+	"gpt-3.5-turbo-16k-0613": 16384,
+	"gpt-3.5-turbo-0301": 4096
+};
+export const DEFAULT_MODEL = OPEN_AI_MODEL_CHOICES[0];
+export const DEFAULT_TOKEN_SIZE = OPEN_AI_MODELS_MAX_TOKEN_SIZES[DEFAULT_MODEL as keyof typeof OPEN_AI_MODELS_MAX_TOKEN_SIZES];
 
 export interface PluginSettings {
-	/** Open API Key */
+	/** Open AI Key */
 	openAIApiKey: string;
-	
+
+	/** Open AI Model */
+	openAIModel: string;
+
+	/** Max Token Size in a Request */
+	maxTokenSize: number;
+
 	/** Minimum Summary Lines */
 	summarySize: number;
 
-    /** Max Token Size in a Request */
-    maxTokenSize: number;
-	
 	/** Template Format */
 	templateFormat: string;
-	
-    /** Date Format */
+
+	/** Date Format */
 	dateFormat: string;
 }
 
 export const DEFAULT_SETTINGS: PluginSettings = {
-    openAIApiKey: "",
+	openAIApiKey: "",
+	openAIModel: DEFAULT_MODEL,
+	maxTokenSize: DEFAULT_TOKEN_SIZE,
 	summarySize: DEFAULT_SUMMARY_SIZE,
-    maxTokenSize: MAX_TOKEN_SIZE_IN_A_REQUEST,
 	templateFormat: DEFAULT_TEMPLATE,
 	dateFormat: DEFAULT_DATE_FORMAT
 };

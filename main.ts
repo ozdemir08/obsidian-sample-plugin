@@ -8,7 +8,7 @@ import {
 	Setting,
 } from "obsidian";
 import { YoutubeVideoSummaryModal } from "src/Modals/YoutubeVideoSummaryModal";
-import { PluginSettings, DEFAULT_SETTINGS, DEFAULT_TEMPLATE, DEFAULT_SUMMARY_SIZE, MAX_SUMMARY_SIZE, MAX_TOKEN_SIZE_IN_A_REQUEST, DEFAULT_DATE_FORMAT } from "settings";
+import { PluginSettings, DEFAULT_SETTINGS, DEFAULT_TEMPLATE, DEFAULT_SUMMARY_SIZE, MAX_SUMMARY_SIZE, OPEN_AI_MODEL_CHOICES, DEFAULT_MODEL, OPEN_AI_MODELS_MAX_TOKEN_SIZES, DEFAULT_DATE_FORMAT } from "settings";
 
 export default class MyPlugin extends Plugin {
 	public settings: PluginSettings;
@@ -85,6 +85,25 @@ class SettingTab extends PluginSettingTab {
 						await this.plugin.updateSettings({openAIApiKey: value});
 					}),
 			);
+			new Setting(containerEl)
+			.setName("OpenAI Model")
+			.setDesc("Choose the OpenAI model to use.")
+			.addDropdown((dropdown) => {
+				// Explicitly define the accumulator type in the reduce function
+				const options = OPEN_AI_MODEL_CHOICES.reduce<Record<string, string>>((acc, model) => {
+					acc[model] = model; // Set both key and value to the model string
+					return acc;
+				}, {});
+		
+				dropdown
+					.addOptions(options)
+					.setValue(this.plugin.settings.openAIModel)
+					.onChange(async (value) => {
+						await this.plugin.updateSettings({openAIModel: value});
+						await this.plugin.updateSettings({maxTokenSize: OPEN_AI_MODELS_MAX_TOKEN_SIZES[value as keyof typeof OPEN_AI_MODELS_MAX_TOKEN_SIZES]});
+					});
+			})
+			;
 		new Setting(containerEl)
 			.setName("Minimum Summary Size")
 			.setDesc("Minimum number of key points per video chunk to include in the generated summary. Note: The plugin divides long videos into chunks, extracts key points from each, and then combines them for the final summary.")
@@ -138,6 +157,8 @@ class SettingTab extends PluginSettingTab {
 					this.plugin.settings.summarySize = DEFAULT_SUMMARY_SIZE;
 					this.plugin.settings.templateFormat = DEFAULT_TEMPLATE;
 					this.plugin.settings.dateFormat = DEFAULT_DATE_FORMAT;
+					this.plugin.settings.openAIModel = OPEN_AI_MODEL_CHOICES[0];
+					this.plugin.settings.maxTokenSize = OPEN_AI_MODELS_MAX_TOKEN_SIZES[DEFAULT_MODEL as keyof typeof OPEN_AI_MODELS_MAX_TOKEN_SIZES];
 				  	this.plugin.saveSettings();
 					this.plugin.unload();
 					this.plugin.load();

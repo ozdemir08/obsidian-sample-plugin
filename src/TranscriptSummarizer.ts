@@ -1,7 +1,7 @@
 import { YoutubeTranscript } from "youtube-transcript";
 import { OpenAIClient } from "./OpenAi/OpenAiClient";
 import { YoutubeMetadataParser } from "./YoutubeMetadataParser/YoutubeVideoMetadataParser";
-import { PluginSettings, MAX_TOKEN_SIZE_IN_A_REQUEST } from "settings";
+import { PluginSettings } from "settings";
 
 export class TranscriptSummarizer {
 	constructor(private openAiClient: OpenAIClient, private settings: PluginSettings) { }
@@ -24,9 +24,9 @@ export class TranscriptSummarizer {
 		// Split the transcript into smaller pieces if necessary.
 		while (startIndex < words.length - 1) {
 			const endIndex =
-				startIndex + MAX_TOKEN_SIZE_IN_A_REQUEST > words.length
+				startIndex + this.settings.maxTokenSize > words.length
 					? words.length - 1
-					: startIndex + MAX_TOKEN_SIZE_IN_A_REQUEST;
+					: startIndex + this.settings.maxTokenSize;
 			const transcriptChunk = words.slice(startIndex, endIndex).join(" ");
 			startIndex = endIndex;
 

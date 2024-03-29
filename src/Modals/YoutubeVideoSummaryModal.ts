@@ -13,7 +13,7 @@ export class YoutubeVideoSummaryModal extends Modal {
 		super(app);
 		this.settings = settings;
 		this.editor = editor;
-		this.openAiClient = new OpenAIClient(this.settings.openAIApiKey);
+		this.openAiClient = new OpenAIClient(this.settings);
 		this.transcriptSummarizer = new TranscriptSummarizer(this.openAiClient, this.settings);
 	}
 
