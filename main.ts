@@ -117,7 +117,7 @@ class SettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName("Template format")
 			.setDesc(
-				"Enter format of template to be used when inserting summary.  Supported fields are {{Date}}, {{Title}}, {{ImageURL}}, {{Description}}, and {{PodcastURL}}.",
+				"Enter format of template to be used when inserting summary.  Supported fields are {{Date}}, {{Title}}, {{ImageURL}}, {{Description}}, and {{VideoUrl}}.",
 			)
 			.addTextArea((text) => 
 				text

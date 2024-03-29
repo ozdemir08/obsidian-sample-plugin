@@ -37,7 +37,7 @@ export class YoutubeMetadataParser {
 			.replace(/{{Description}}/g, video.desc)
 			.replace(/{{Date}}/g, video.date)
 			.replace(/{{Timestamp}}/g, Date.now().toString())
-			.replace(/{{PodcastURL}}/g, video.url)
+			.replace(/{{VideoUrl}}/g, video.url)
 			.replace(/{{ShowNotes}}/g, video.showNotes)
 			.replace(/{{EpisodeDate}}/g, video.episodeDate);
 		console.debug("updated content", content);
