@@ -1,12 +1,11 @@
 import { DEFAULT_VIDEO } from "./Constants";
 import { Notice, moment, request } from "obsidian";
 import { YoutubeVideo, YoutubeVideoContent } from "./Models";
-
-const YOUTUBE_BASE_URL = "youtube.com";
-const TEMPLATE =
-	"---\ndate: {{Date}}\n---\n# {{Title}}\n![]({{ImageURL}})\n## Description:\n{{Description}}\n-> [Youtube video Link]({{PodcastURL}})\n\n## Summary:\n";
+import { PluginSettings, YOUTUBE_BASE_URL } from "settings";
 
 export class YoutubeMetadataParser {
+	constructor(private settings: PluginSettings) { }
+
 	async requestHTML(url: string) {
 		try {
 			let response = await request({ url: url, method: "GET" });
@@ -31,14 +30,17 @@ export class YoutubeMetadataParser {
 
 	applyTemplate(video: YoutubeVideo): YoutubeVideoContent {
 		video = this.sanitizePodcast(video);
-		let content = TEMPLATE.replace(/{{Title}}/g, video.title)
+		console.debug("template format", this.settings.templateFormat);
+		let content = this.settings.templateFormat
+			.replace(/{{Title}}/g, video.title)
 			.replace(/{{ImageURL}}/g, video.imageLink)
 			.replace(/{{Description}}/g, video.desc)
 			.replace(/{{Date}}/g, video.date)
 			.replace(/{{Timestamp}}/g, Date.now().toString())
-			.replace(/{{PodcastURL}}/g, video.url)
+			.replace(/{{VideoUrl}}/g, video.url)
 			.replace(/{{ShowNotes}}/g, video.showNotes)
 			.replace(/{{EpisodeDate}}/g, video.episodeDate);
+		console.debug("updated content", content);
 		return { title: video.title, content: content };
 	}
 

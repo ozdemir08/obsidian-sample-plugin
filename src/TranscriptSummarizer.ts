@@ -1,16 +1,13 @@
 import { YoutubeTranscript } from "youtube-transcript";
 import { OpenAIClient } from "./OpenAi/OpenAiClient";
 import { YoutubeMetadataParser } from "./YoutubeMetadataParser/YoutubeVideoMetadataParser";
-
-const PROMPT =
-	"Below is a transcript of a Youtube video. Can you give me 3 key points and return the results as an unordered markdown list? \n --- \n";
-const MAX_TOKEN_SIZE_IN_A_REQUEST = 2500;
+import { PluginSettings } from "settings";
 
 export class TranscriptSummarizer {
-	constructor(private openAiClient: OpenAIClient) { }
+	constructor(private openAiClient: OpenAIClient, private settings: PluginSettings) { }
 
 	async getSummaryFromUrl(url: string): Promise<string> {
-		const youtubeMetadata = await new YoutubeMetadataParser().getVideoNote(
+		const youtubeMetadata = await new YoutubeMetadataParser(this.settings).getVideoNote(
 			url,
 		);
 
@@ -27,9 +24,9 @@ export class TranscriptSummarizer {
 		// Split the transcript into smaller pieces if necessary.
 		while (startIndex < words.length - 1) {
 			const endIndex =
-				startIndex + MAX_TOKEN_SIZE_IN_A_REQUEST > words.length
+				startIndex + this.settings.maxTokenSize > words.length
 					? words.length - 1
-					: startIndex + MAX_TOKEN_SIZE_IN_A_REQUEST;
+					: startIndex + this.settings.maxTokenSize;
 			const transcriptChunk = words.slice(startIndex, endIndex).join(" ");
 			startIndex = endIndex;
 
@@ -43,6 +40,14 @@ export class TranscriptSummarizer {
 	}
 
 	async getKeyPointsFromTranscript(transcript: string): Promise<string> {
-		return this.openAiClient.query(PROMPT + transcript);
+		return this.openAiClient.query(this.constructPrompt() + transcript);
+	}
+
+	constructPrompt() {
+		let numberOfKeyPoints = this.settings.summarySize;
+		if (numberOfKeyPoints == 0) numberOfKeyPoints = 3;
+		let prompt = `Below is a transcript of a Youtube video. Can you give me ${numberOfKeyPoints} key points and return the results as an unordered markdown list? \n --- \n`;
+		console.debug("prompt", prompt)
+		return prompt;
 	}
 }
