@@ -24,6 +24,9 @@ export const OPEN_AI_MODELS_MAX_TOKEN_SIZES = {
 };
 export const DEFAULT_MODEL = OPEN_AI_MODEL_CHOICES[0];
 export const DEFAULT_TOKEN_SIZE = OPEN_AI_MODELS_MAX_TOKEN_SIZES[DEFAULT_MODEL as keyof typeof OPEN_AI_MODELS_MAX_TOKEN_SIZES];
+export const ENABLE_LOCAL_MODEL = false;
+export const LOCAL_MODEL_URL = "http://localhost:11434/api/generate";
+export const LOCAL_MODEL = "llama2";
 
 export interface PluginSettings {
 	/** Open AI Key */
@@ -43,6 +46,15 @@ export interface PluginSettings {
 
 	/** Date Format */
 	dateFormat: string;
+
+	/** Enable Local Model */
+	enableLocalModel: boolean;
+
+	/** Local Model URL */
+	localModelUrl: string;
+
+	/** Local Model */
+	localModel: string;
 }
 
 export const DEFAULT_SETTINGS: PluginSettings = {
@@ -51,5 +63,8 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	maxTokenSize: DEFAULT_TOKEN_SIZE,
 	summarySize: DEFAULT_SUMMARY_SIZE,
 	templateFormat: DEFAULT_TEMPLATE,
-	dateFormat: DEFAULT_DATE_FORMAT
+	dateFormat: DEFAULT_DATE_FORMAT,
+	enableLocalModel: ENABLE_LOCAL_MODEL,
+	localModelUrl: LOCAL_MODEL_URL,
+	localModel: LOCAL_MODEL
 };

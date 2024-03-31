@@ -1,11 +1,13 @@
 import { App, Editor, Modal, Notice } from "obsidian";
-import { OpenAIClient } from "src/OpenAi/OpenAiClient";
+import { AiClient } from "src/AiClient/AiClient";
+import { OpenAIClient } from "src/AiClient/OpenAiClient";
+import { OllamaClient } from "src/AiClient/OllamaClient";
 import { TranscriptSummarizer } from "src/TranscriptSummarizer";
 import { PluginSettings, YOUTUBE_BASE_URL } from "settings";
 
 export class YoutubeVideoSummaryModal extends Modal {
 	editor: Editor;
-	openAiClient: OpenAIClient;
+	aiClient: AiClient;
 	transcriptSummarizer: TranscriptSummarizer;
 	settings: PluginSettings;
 
@@ -13,8 +15,12 @@ export class YoutubeVideoSummaryModal extends Modal {
 		super(app);
 		this.settings = settings;
 		this.editor = editor;
-		this.openAiClient = new OpenAIClient(this.settings);
-		this.transcriptSummarizer = new TranscriptSummarizer(this.openAiClient, this.settings);
+		if (this.settings.enableLocalModel) {
+			this.aiClient = new OllamaClient(this.settings);
+		} else {
+			this.aiClient = new OpenAIClient(this.settings);
+		}
+		this.transcriptSummarizer = new TranscriptSummarizer(this.aiClient, this.settings);
 	}
 
 	onOpen() {
