@@ -8,7 +8,7 @@ import {
 	Setting,
 } from "obsidian";
 import { YoutubeVideoSummaryModal } from "src/Modals/YoutubeVideoSummaryModal";
-import { PluginSettings, DEFAULT_SETTINGS, DEFAULT_TEMPLATE, DEFAULT_SUMMARY_SIZE, MAX_SUMMARY_SIZE, OPEN_AI_MODEL_CHOICES, DEFAULT_MODEL, OPEN_AI_MODELS_MAX_TOKEN_SIZES, DEFAULT_DATE_FORMAT } from "settings";
+import { PluginSettings, DEFAULT_SETTINGS, DEFAULT_TEMPLATE, DEFAULT_SUMMARY_SIZE, MAX_SUMMARY_SIZE, OPEN_AI_MODEL_CHOICES, DEFAULT_MODEL, OPEN_AI_MODELS_MAX_TOKEN_SIZES, DEFAULT_DATE_FORMAT, LOCAL_MODEL_URL, LOCAL_MODEL } from "settings";
 
 export default class MyPlugin extends Plugin {
 	public settings: PluginSettings;
@@ -143,6 +143,45 @@ class SettingTab extends PluginSettingTab {
 						await this.plugin.updateSettings({dateFormat: value});
 					}),
 			);
+		let localModelSubsettingsEnabled = this.plugin.settings.enableLocalModel;
+		new Setting(containerEl)
+			.setName("Enable Local Model")
+			.setDesc("Enable use of a locally run model.")
+			.addToggle((toggle) => {
+				toggle
+					.setValue(this.plugin.settings.enableLocalModel)
+					.onChange(async (value) => {
+						await this.plugin.updateSettings({enableLocalModel: value});
+						localModelSubsettingsEnabled = value;
+						this.display();
+					});
+			});
+		if (localModelSubsettingsEnabled) {
+			new Setting(containerEl)
+				.setName("Local Model URL")
+				.setDesc("URL of locally run model.  Defaults to the standard Ollama REST endpoint.")
+				.setDisabled(!this.plugin.settings.enableLocalModel)
+				.addText((text) =>
+					text
+						.setPlaceholder(LOCAL_MODEL_URL)
+						.setValue(this.plugin.settings.localModelUrl)
+						.onChange(async (value) => {
+							await this.plugin.updateSettings({localModelUrl: value});
+						}),
+				);
+			new Setting(containerEl)
+				.setName("Local Model")
+				.setDesc("Name of locally run model.  Defaults to llama2.")
+				.setDisabled(!this.plugin.settings.enableLocalModel)
+				.addText((text) =>
+					text
+						.setPlaceholder(LOCAL_MODEL)
+						.setValue(this.plugin.settings.localModel)
+						.onChange(async (value) => {
+							await this.plugin.updateSettings({localModel: value});
+						}),
+				);
+		}
 		new Setting(containerEl)
 			.setName("Reset defaults")
 			.setDesc(
@@ -159,9 +198,13 @@ class SettingTab extends PluginSettingTab {
 					this.plugin.settings.dateFormat = DEFAULT_DATE_FORMAT;
 					this.plugin.settings.openAIModel = OPEN_AI_MODEL_CHOICES[0];
 					this.plugin.settings.maxTokenSize = OPEN_AI_MODELS_MAX_TOKEN_SIZES[DEFAULT_MODEL as keyof typeof OPEN_AI_MODELS_MAX_TOKEN_SIZES];
+					this.plugin.settings.enableLocalModel = false;
+					this.plugin.settings.localModelUrl = LOCAL_MODEL_URL;
+					this.plugin.settings.localModel = LOCAL_MODEL;
 				  	this.plugin.saveSettings();
 					this.plugin.unload();
 					this.plugin.load();
+					this.display();
 				});
 			});
 	}

@@ -1,10 +1,10 @@
 import { YoutubeTranscript } from "youtube-transcript";
-import { OpenAIClient } from "./OpenAi/OpenAiClient";
+import { AiClient } from "src/AiClient/AiClient";
 import { YoutubeMetadataParser } from "./YoutubeMetadataParser/YoutubeVideoMetadataParser";
 import { PluginSettings } from "settings";
 
 export class TranscriptSummarizer {
-	constructor(private openAiClient: OpenAIClient, private settings: PluginSettings) { }
+	constructor(private aiClient: AiClient, private settings: PluginSettings) { }
 
 	async getSummaryFromUrl(url: string): Promise<string> {
 		const youtubeMetadata = await new YoutubeMetadataParser(this.settings).getVideoNote(
@@ -40,7 +40,7 @@ export class TranscriptSummarizer {
 	}
 
 	async getKeyPointsFromTranscript(transcript: string): Promise<string> {
-		return this.openAiClient.query(this.constructPrompt() + transcript);
+		return this.aiClient.query(this.constructPrompt() + transcript);
 	}
 
 	constructPrompt() {
